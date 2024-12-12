@@ -1,0 +1,77 @@
+argo-cd:
+  global:
+    domain: argocd.ivanchenko.io
+  configs:
+    params:
+      server.insecure: true
+      controller.diff.server.side: true
+    secret:
+      createSecret: false
+    cm:
+      admin.enabled: true
+      resource.ignoreResourceUpdatesEnabled: true
+    rbac:
+      policy.csv: |
+        g, admins, role:admin
+  server:
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+      tls: true
+  redisSecretInit:
+    enabled: false
+argocd-apps:
+  projects:
+    default:
+      namespace: argocd
+      description: default
+      sourceRepos:
+        - '*'
+      destinations:
+        - namespace: '*'
+          server: '*'
+      clusterResourceWhitelist:
+        - group: '*'
+          kind: '*'
+  applicationsets:
+    root:
+      namespace: argocd
+      generators:
+        - git:
+            repoURL: &repoURL https://github.com/vanchaxy/homelab
+            revision: &revision main
+            directories:
+              - path: k8s/system/*
+              - path: k8s/platform/*
+              - path: k8s/apps/*
+      template:
+        metadata:
+          name: '{{path.basename}}'
+        spec:
+          destination:
+            name: in-cluster
+            namespace: '{{path.basename}}'
+          project: default
+          source:
+            repoURL: *repoURL
+            path: '{{path}}'
+            targetRevision: *revision
+          syncPolicy:
+            automated:
+              prune: true
+              selfHeal: true
+            retry:
+              limit: 10
+              backoff:
+                duration: 1m
+                factor: 2
+                maxDuration: 16m
+            syncOptions:
+              - CreateNamespace=true
+              - ApplyOutOfSyncOnly=true
+              - ServerSideApply=true
+            managedNamespaceMetadata:
+              labels:
+                pod-security.kubernetes.io/enforce: privileged

@@ -1,0 +1,10 @@
+.idea
+
+.terraform
+.terraform.lock.hcl
+*.auto.tfvars
+*.bak
+output
+
+charts
+Chart.lock

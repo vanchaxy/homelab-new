@@ -1,0 +1,36 @@
+librespeed:
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            repository: lscr.io/linuxserver/librespeed
+            tag: 5.4.1
+
+  service:
+    main:
+      controller: main
+      type: ClusterIP
+      ports:
+        http:
+          port: 80
+
+  ingress:
+    main:
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+        nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+        nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
+        nginx.ingress.kubernetes.io/proxy-body-size: '0'
+      hosts:
+        - host: &host speed.ivanchenko.io
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                identifier: main
+                port: http
+      tls:
+        - secretName: immich-tls
+          hosts:
+            - *host

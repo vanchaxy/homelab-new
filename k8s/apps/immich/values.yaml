@@ -1,0 +1,59 @@
+cloudnative-pg:
+  config:
+    clusterWide: false
+
+immich:
+  env:
+    DB_HOSTNAME:
+      valueFrom:
+        secretKeyRef:
+          name: immich-postgres-app
+          key: host
+    DB_USERNAME:
+      valueFrom:
+        secretKeyRef:
+          name: immich-postgres-app
+          key: username
+    DB_DATABASE_NAME:
+      valueFrom:
+        secretKeyRef:
+          name: immich-postgres-app
+          key: dbname
+    DB_PASSWORD:
+      valueFrom:
+        secretKeyRef:
+          name: immich-postgres-app
+          key: password
+
+  image:
+    # repository for renovate, not used in chart
+    repository: ghcr.io/immich-app/immich-server
+    tag: v1.123.0
+
+  immich:
+    persistence:
+      library:
+        existingClaim: photo-library
+
+  server:
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+        hosts:
+          - host: immich.ivanchenko.io
+            paths:
+              - path: "/"
+        tls:
+          - secretName: immich-tls
+            hosts:
+              - immich.ivanchenko.io
+
+  redis:
+    enabled: true
+    master:
+      persistence:
+        existingClaim: redis-data

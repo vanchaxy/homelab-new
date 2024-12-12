@@ -1,0 +1,21 @@
+longhorn:
+  persistence:
+    defaultClass: false
+  preUpgradeChecker:
+    jobEnabled: false
+  defaultSettings:
+    backupTarget: s3://longhorn-vanchaxy@dummyregion/
+    backupTargetCredentialSecret: b2-secret
+    createDefaultDiskLabeledNodes: true
+    storageOverProvisioningPercentage: 100
+    defaultReplicaCount: 2
+    autoDeletePodWhenVolumeDetachedUnexpectedly: true
+    nodeDownPodDeletionPolicy: delete-both-statefulset-and-deployment-pod
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    host: longhorn.ivanchenko.io
+    tls: true
+    tlsSecret: longhorn-tls
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt

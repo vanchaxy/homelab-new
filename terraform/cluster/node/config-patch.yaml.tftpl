@@ -1,0 +1,90 @@
+machine:
+  network:
+    hostname: ${hostname}
+  nodeLabels:
+    topology.kubernetes.io/region: ${cluster_name}
+    topology.kubernetes.io/zone: ${node_name}
+    node.longhorn.io/create-default-disk: 'config'
+  nodeAnnotations:
+    node.longhorn.io/default-disks-config: '${
+      jsonencode(concat(
+        [{name="nmve", path="/var/mnt/storage", allowScheduling=true, tags=["ssd"]}],
+        usb_disk_id != "" ? [{name="usb-hdd", path="/var/mnt/storage-usb", allowScheduling=true, tags=["hdd", "usb"]}]: []
+      ))
+    }'
+  install:
+    disk: /dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0
+    image: ${install_image}
+    wipe: false
+  kubelet:
+    extraMounts:
+      - destination: /var/lib/longhorn
+        type: bind
+        source: /var/lib/longhorn
+        options:
+          - bind
+          - rshared
+          - rw
+      - destination: /var/mnt/storage
+        type: bind
+        source: /var/mnt/storage
+        options:
+          - bind
+          - rshared
+          - rw
+      %{ if usb_disk_id != "" }
+      - destination: /var/mnt/storage-usb
+        type: bind
+        source: /var/mnt/storage-usb
+        options:
+          - bind
+          - rshared
+          - rw
+      %{ endif }
+  disks:
+    - device: /dev/disk/by-id/${ssd_disk_id}
+      partitions:
+        - mountpoint: /var/mnt/storage
+    %{ if usb_disk_id != "" }
+    - device: /dev/disk/by-id/${usb_disk_id}
+      partitions:
+        - mountpoint: /var/mnt/storage-usb
+    %{ endif }
+
+cluster:
+  allowSchedulingOnControlPlanes: true
+  apiServer:
+    admissionControl:
+      - name: PodSecurity
+        configuration:
+          exemptions:
+            namespaces:
+              - longhorn-system
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+  # Optional Gateway API CRDs
+  extraManifests:
+  - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml
+  - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/experimental/gateway.networking.k8s.io_gateways.yaml
+  - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml
+  - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml
+  - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml
+  - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
+  inlineManifests:
+  - name: cilium-values
+    contents: |
+      ---
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cilium-values
+        namespace: kube-system
+      data:
+        values.yaml: |-
+          ${indent(10, cilium_values)}
+  - name: cilium-bootstrap
+    contents: |
+      ${indent(6, cilium_install)}
