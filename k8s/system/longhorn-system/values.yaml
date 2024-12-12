@@ -2,8 +2,8 @@ longhorn:
   persistence:
     defaultClass: false
     defaultClassReplicaCount: 1
-  helmPreUpgradeCheckerJob:
-    enabled: false
+  preUpgradeChecker:
+    jobEnabled: false
   defaultSettings:
 #    backupTarget: s3://longhorn-backups@us-east-1/
 #    backupTargetCredentialSecret: idrivee2-secret
