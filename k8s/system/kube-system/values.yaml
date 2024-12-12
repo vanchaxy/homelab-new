@@ -75,6 +75,8 @@ cilium:
     default: true
     loadbalancerMode: shared
     service:
+      insecureNodePort: 30080
+      secureNodePort: 30443
       annotations:
         io.cilium/lb-ipam-ips: 192.168.50.233
 
