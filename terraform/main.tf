@@ -1,6 +1,6 @@
 locals {
   cilium = {
-    values = file("${path.module}/proxmox-node/values.yaml")
+    values = yamlencode(yamldecode(file("${path.module}/../k8s/system/kube-system/values.yaml")).cilium)
     install = file("${path.module}/proxmox-node/cilium-install.yaml")
   }
 
@@ -18,8 +18,8 @@ locals {
       ip            = "192.168.50.211"
       mac_address   = "BC:24:11:2E:C8:11"
       cpu           = 8
-      ram_dedicated = 4096
-      disk_size_gb  = 20
+      ram_dedicated = 13312
+      disk_size_gb  = 128
       ssd_pci_id    = "0000:03:00.0"
       ssd_disk_id   = "nvme-SAMSUNG_MZVLB256HAHQ-000H7_S426NX0M109347"
       usb_id        = "1058:264d"
@@ -30,8 +30,8 @@ locals {
       ip            = "192.168.50.212"
       mac_address   = "BC:24:11:2E:C8:12"
       cpu           = 8
-      ram_dedicated = 4096
-      disk_size_gb  = 20
+      ram_dedicated = 28672
+      disk_size_gb  = 128
       ssd_pci_id    = "0000:01:00.0"
       ssd_disk_id   = "nvme-CT2000P3PSSD8_2443E990D502"
       usb_id        = ""
@@ -42,8 +42,8 @@ locals {
       ip            = "192.168.50.213"
       mac_address   = "BC:24:11:2E:C8:13"
       cpu           = 8
-      ram_dedicated = 4096
-      disk_size_gb  = 20
+      ram_dedicated = 28672
+      disk_size_gb  = 128
       ssd_pci_id    = "0000:01:00.0"
       ssd_disk_id   = "nvme-CT2000P3PSSD8_2443E990D4E6"
       usb_id        = ""

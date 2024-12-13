@@ -25,6 +25,7 @@ data "talos_machine_configuration" "this" {
     })
   ]
 }
+
 output "machine_config" {
   value = data.talos_machine_configuration.this
 }
