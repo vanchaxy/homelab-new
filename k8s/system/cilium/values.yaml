@@ -1,5 +1,3 @@
-namespaceOverride: "kube-system"
-
 cilium:
   namespaceOverride: "kube-system"
 
