@@ -1,4 +1,6 @@
 cilium:
+  namespaceOverride: "kube-system"
+
   cluster:
     name: talos
     id: 1
