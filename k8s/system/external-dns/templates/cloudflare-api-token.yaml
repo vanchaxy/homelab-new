@@ -1,0 +1,17 @@
+apiVersion: secrets.infisical.com/v1alpha1
+kind: InfisicalSecret
+metadata:
+  name: cloudflare-api-token
+spec:
+  authentication:
+    universalAuth:
+      secretsScope:
+        projectSlug: homelab-vn-bd
+        envSlug: prod
+        secretsPath: "/external-dns"
+      credentialsRef:
+        secretName: universal-auth-credentials
+        secretNamespace: infisical
+  managedSecretReference:
+    secretName: cloudflare-api-token
+    secretNamespace: external-dns

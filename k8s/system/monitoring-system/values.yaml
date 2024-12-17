@@ -1,13 +1,11 @@
 kube-prometheus-stack:
   grafana:
     enabled: false
+  nodeExporter:
+    enabled: false
   prometheus:
     prometheusSpec:
       ruleSelectorNilUsesHelmValues: false
       serviceMonitorSelectorNilUsesHelmValues: false
       podMonitorSelectorNilUsesHelmValues: false
       probeSelectorNilUsesHelmValues: false
-  prometheus-node-exporter:
-    hostNetwork: false
-    tolerations:
-      - operator: "Exists"
