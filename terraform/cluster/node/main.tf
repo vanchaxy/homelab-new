@@ -80,7 +80,7 @@ data "talos_machine_configuration" "this" {
       node_name     = var.node.name
       cluster_name  = var.cluster.name
       install_image = var.talos_installer_url
-      cilium_values = yamlencode(yamldecode(file("${path.module}/../../k8s/system/kube-system/values.yaml")).cilium)
+      cilium_values = yamlencode(yamldecode(file("${path.module}/../../../k8s/system/kube-system/values.yaml")).cilium)
       cilium_install = file("${path.module}/manifests/cilium-install.yaml")
       ssd_disk_id   = var.node.ssd_disk_id
       usb_disk_id   = var.node.usb_disk_id

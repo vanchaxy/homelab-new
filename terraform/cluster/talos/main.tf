@@ -10,7 +10,7 @@ data "talos_client_configuration" "this" {
 }
 
 resource "talos_machine_bootstrap" "this" {
-  node                 = var.nodes_ips[0]
+  node                 = var.nodes_ips[1]
   endpoint             = var.cluster.endpoint
   client_configuration = talos_machine_secrets.this.client_configuration
 }
@@ -34,7 +34,7 @@ resource "talos_cluster_kubeconfig" "this" {
     talos_machine_bootstrap.this,
     data.talos_cluster_health.this
   ]
-  node                 = var.nodes_ips[0]
+  node                 = var.nodes_ips[1]
   endpoint             = var.cluster.endpoint
   client_configuration = talos_machine_secrets.this.client_configuration
   timeouts = {

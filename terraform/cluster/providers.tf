@@ -3,7 +3,7 @@ terraform {
     organization = "ivanchenko"
 
     workspaces {
-      name = "homelab"
+      name = "homelab-cluster"
     }
   }
 
