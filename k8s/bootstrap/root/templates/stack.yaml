@@ -20,7 +20,7 @@ spec:
     spec:
       destination:
         name: in-cluster
-        namespace: '{{ default `{{path.basename}}` $stack.namespace }}'
+        namespace: '{{ `{{path.basename}}` }}'
       project: default
       source:
         repoURL: {{ $.Values.gitops.repo }}
