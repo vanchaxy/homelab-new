@@ -23,6 +23,7 @@ cilium:
   # https://docs.cilium.io/en/stable/network/concepts/ipam/
   ipam:
     mode: kubernetes
+    multiPoolPreAllocation: "default=8"
 
   operator:
     rollOutPods: true
