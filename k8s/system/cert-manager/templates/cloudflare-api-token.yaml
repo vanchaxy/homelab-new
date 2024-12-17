@@ -15,4 +15,4 @@ spec:
   managedSecretReference:
     creationPolicy: "Owner"
     secretName: cloudflare-api-token
-    secretNamespace: external-dns
+    secretNamespace: cert-manager

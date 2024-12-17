@@ -10,6 +10,8 @@ spec:
       name: letsencrypt
     solvers:
     - selector: {}
-      http01:
-        ingress:
-          class: nginx
+      dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            name: cloudflare-api-token
+            key: api-token
