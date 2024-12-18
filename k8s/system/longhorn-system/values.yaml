@@ -1,15 +1,14 @@
 longhorn:
   persistence:
-    defaultClass: true
-    defaultClassReplicaCount: 1
+    defaultClass: false
   preUpgradeChecker:
     jobEnabled: false
   defaultSettings:
-#    backupTarget: s3://longhorn-backups@us-east-1/
-#    backupTargetCredentialSecret: idrivee2-secret
+    backupTarget: s3://longhorn-vanchaxy@dummyregion/
+    backupTargetCredentialSecret: b2-secret
     createDefaultDiskLabeledNodes: true
     storageOverProvisioningPercentage: 100
-    defaultReplicaCount: 1
+    defaultReplicaCount: 2
     autoDeletePodWhenVolumeDetachedUnexpectedly: true
     nodeDownPodDeletionPolicy: delete-both-statefulset-and-deployment-pod
 #  ingress:
