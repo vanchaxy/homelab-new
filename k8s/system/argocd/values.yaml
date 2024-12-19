@@ -26,6 +26,7 @@ argocd-apps:
   projects:
     default:
       namespace: argocd
+      description: default
       sourceRepos:
         - '*'
       destinations:

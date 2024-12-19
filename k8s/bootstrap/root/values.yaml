@@ -1,8 +1,0 @@
-gitops:
-  repo: https://github.com/vanchaxy/homelab-new
-  revision: main
-stacks:
-  - name: bootstrap
-  - name: system
-#  - name: platform
-#  - name: apps
