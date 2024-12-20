@@ -5,7 +5,7 @@ librespeed:
         main:
           image:
             repository: lscr.io/linuxserver/librespeed
-            tag: 5.4.1
+            tag: 5.4.20240804
 
   service:
     main:
