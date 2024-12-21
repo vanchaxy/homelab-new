@@ -1,0 +1,13 @@
+spec:
+  generators:
+    - git:
+        directories:
+          - path: k8s/system/*
+          - path: k8s/platform/*
+          - path: k8s/apps/*
+        repoURL: https://github.com/vanchaxy/homelab
+        revision: &revision feature/branch-name # replace
+  template:
+    spec:
+      source:
+        targetRevision: *revision
